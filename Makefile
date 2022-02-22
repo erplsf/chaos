@@ -5,6 +5,11 @@ CC := $(CROSSBIN)/$(TARGET)-gcc
 AS := nasm
 CXX := $(CROSSBIN)/$(TARGET)-g++
 
+.PHONY: clean
+
+clean:
+	rm -f boot.o kernel.o chaos.bin
+
 all: boot.o kernel.o chaos.bin
 
 kernel.o:
@@ -17,4 +22,4 @@ chaos.bin: kernel.o boot.o
 	$(CC) -T linker.ld -o chaos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 
 qemu: chaos.bin
-	qemu-system-i386 -kernel chaos.bin
+	qemu-system-i386 -vga std -kernel chaos.bin
